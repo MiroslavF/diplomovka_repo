@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    
+    <script src="/chart"></script>
+    <script src="/axios"></script>
+</head>
+
+<body>
+    <div style="width: 70%; margin: auto;">
+        <div class="value-container">
+            <strong>Počet vrcholov <em>N = {{nodeCount}}</em></strong>
+        </div>
+        <div class="value-container">
+            <strong>Počet hrán <em>L = {{edgeCount}}</em></strong>
+        </div>
+        <div class="value-container">
+            <strong>Priemer siete <em>d<sub>max</sub> = {{diameter}}</em></strong>
+        </div>
+        <div class="value-container">
+            <strong>Priemerný stupeň uzla <em>⟨k⟩ = {{averageNodeDegree}}</em></strong>
+        </div>
+        <div class="value-container">
+            <strong>Priemerná vzdialenosť medzi dvoma vrcholmi <em>⟨d⟩ = {{averageDistance}}</em></strong>
+        </div>
+        <div class="value-container">
+            <strong>Priemerný klasterizačný koeficient <em>⟨c⟩ = {{averageClusteringCoefficient}}</em></strong>
+        </div>
+
+        <hr/>
+
+        <div class="chart-container">
+            <canvas id="degreeDistribution"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="distanceDistribution"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="clusteringCoefficientDistribution"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="hierarchicalClustering"></canvas>
+        </div>
+
+        <hr/>
+
+        <div class="heading">
+            <strong>Exponent stupňa &gamma;</strong>
+        </div>
+        <div class="value-container">
+            <strong>
+                Odhad z maximálneho stupňa: <em>&gamma; = {{degreeExponentFromMaxDegree}}</em> ... 
+                k<sub>max</sub> = k<sub>min</sub>N<sup>(1 / &gamma;-1)</sup>
+            </strong>
+        </div>
+        <div class="value-container">
+            <strong>
+                Maximum likelihood: <em>&gamma; = {{degreeExponentMaximumLikelihood}}</em>
+            </strong>
+        </div>
+        <div class="chart-container">
+            <canvas id="degreeExponentNormal"></canvas>
+            <canvas id="degreeExponentNormalLogBinned"></canvas>
+            <canvas id="degreeExponentCumulative"></canvas>
+            <canvas id="degreeExponentCumulativeLogBinned"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="degreeCorrelations"></canvas>
+        </div>
+    </div>
+
+    <script src="/frontend-config.js"></script>
+    <script src="/degree-distribution-chart.js"></script>
+    <script src="/distance-distribution-chart.js"></script>
+    <script src="/clustering-coefficient-distribution-chart.js"></script>
+    <script src="/hierarchical-clustering-chart.js"></script>
+    <script src="/degree-exponent-charts.js"></script>
+    <script src="/degree-correlation-chart.js"></script>
+
+</body>
+
+</html>

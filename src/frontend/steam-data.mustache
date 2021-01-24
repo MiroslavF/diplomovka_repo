@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous"
+    >
+    
+    <script src="/chart"></script>
+    <script src="/axios"></script>
+</head>
+
+<body>
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Počty</strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet hráčov = <em>{{playerCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet hráčov s dostupnou krajinou = <em>{{availableCountryPlayerCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet hráčov s dostupnými hernými dátami = <em>{{availableGameDataPlayerCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet hraných hier = <em>{{gameCount}}</em></strong>
+            (Každú hru hral aspoň niekto aspoň hodinu)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet dokopy nahratých hodín = <em>{{totalPlaytime}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet krajín v sieti (ISO 3166-2 kódy) = <em>{{countryCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít (aj vnorených) = <em>{{communityCount}}</em></strong>
+            (k: 3-22)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít so známou krajinou všetkých hráčov = <em>{{availableCountryCommunityCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít s dostupnými hernými dátami všetkých hráčov = <em>{{availableGameDataCommunityCount}}</em></strong>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Priemerné hodnoty na jedného hráča</strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet priateľov = <em>{{avgFriendsCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Steam level = <em>{{avgSteamLevel}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet kúpených hier = <em>{{avgGameCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet nahraných hodín = <em>{{avgPlaytime}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Podiel priateľov s rovnakou krajinou = <em>{{avgSameCountryNeighboursFraction}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet rokov v sieti = <em>{{avgYearsRegistered}}</em></strong>
+            <br/>
+            (doba od registrácie)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít = <em>{{avgCommunitiesMember}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet spájaných komunít = <em>{{avgMaxJoiningCommunities}}</em></strong>
+            <br/>
+            (Max v koľkých je naraz komunitách pre rôzne k-clique rozdelenie siete do komunít)
+        </div>
+        <div class="steam-value-container">
+            <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficient}}</em></strong>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Priemerné hodnoty na jedného hru</strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet odohratých hodín = <em>{{avgGamePlaytime}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet hráčov (vlastníkov) = <em>{{avgGameUserCount}}</em></strong>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Krajiny</strong>
+        </div>
+        <div class="chart-container">
+            <canvas id="countryDistribution"></canvas>
+        </div>
+        <div class="steam-value-container">
+            <strong>Priemerne je v každej komunite <em>{{averageCommunityCountryDominance}}%</em> ľudí z rovnakej krajiny</strong>
+        </div>
+        <div class="value-container">
+            Skupinkovanie krajín
+        </div> 
+        <table class="table">
+            <thead>
+                <tr><th>Krajina</th><th>Priemerné % hráčov z danej krajiny, v komunitách kde je daná krajina dominantná</th></tr>
+            </thead>
+            <tbody>
+                {{#averageCommunityCountryDominancePerCountry}}
+                    <tr><td>{{country}}</td><td>{{average}}</td></tr>
+                {{/averageCommunityCountryDominancePerCountry}}
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Hry</strong>
+        </div>
+        <div class="chart-container">
+            <canvas id="mostPlayedGames"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="gamePlaytimeDistribution"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="userPlaytimeDistribution"></canvas>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Komunity</strong>
+        </div>
+        <div class="chart-container">
+            <canvas id="communitySizeDistribution"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="communityMembershipDistribution"></canvas>
+        </div>
+    </div>
+
+        <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="value-container">
+            Priemerné hodnoty hráčov bez komunity({{playersWithoutCommunityCount}})
+        </div> 
+        <div class="steam-value-container">
+            <strong>Počet priateľov = <em>{{avgFriendsCountNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Steam level = <em>{{avgSteamLevelNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet kúpených hier = <em>{{avgGameCountNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet nahraných hodín = <em>{{avgPlaytimeNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Podiel priateľov s rovnakou krajinou = <em>{{avgSameCountryNeighboursFractionNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet rokov v sieti = <em>{{avgYearsRegisteredNoCommunity}}</em></strong>
+            <br/>
+            (doba od registrácie)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít = <em>{{avgCommunitiesMemberNoCommunity}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet spájaných komunít = <em>{{avgMaxJoiningCommunitiesNoCommunity}}</em></strong>
+            <br/>
+            (Max v koľkých je naraz komunitách pre rôzne k-clique rozdelenie siete do komunít)
+        </div>
+        <div class="steam-value-container">
+            <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficientNoCommunity}}</em></strong>
+        </div>
+    </div>
+
+        <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="value-container">
+            Priemerné hodnoty hráčov čo spájajú najviac komunít (aspon 10)
+        </div> 
+        <div class="steam-value-container">
+            <strong>Počet priateľov = <em>{{avgFriendsCountMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Steam level = <em>{{avgSteamLevelMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet kúpených hier = <em>{{avgGameCountMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet nahraných hodín = <em>{{avgPlaytimeMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Podiel priateľov s rovnakou krajinou = <em>{{avgSameCountryNeighboursFractionMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet rokov v sieti = <em>{{avgYearsRegisteredMostCommunities}}</em></strong>
+            <br/>
+            (doba od registrácie)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít = <em>{{avgCommunitiesMemberMostCommunities}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet spájaných komunít = <em>{{avgMaxJoiningCommunitiesMostCommunities}}</em></strong>
+            <br/>
+            (Max v koľkých je naraz komunitách pre rôzne k-clique rozdelenie siete do komunít)
+        </div>
+        <div class="steam-value-container">
+            <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficientMostCommunities}}</em></strong>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="chart-container">
+            <canvas id="propertyCorrelations"></canvas>
+        </div>
+    </div>
+    <div style="width: 70%; margin: auto;">
+        <div class="chart-container">
+            <canvas id="networkEvolution"></canvas>
+        </div>
+    </div>
+    <div style="width: 70%; margin: auto;">
+        <div class="chart-container">
+            <canvas id="communityFavouriteGamesMatch"></canvas>
+        </div>
+    </div>
+    <div style="width: 70%; margin: auto;">
+        <div class="value-container">
+            Priemerné relatívne odchýlky vrámci komunít, pre jednotlivé vlastnosti.
+            A v percentách koľkokrát boli pri náhodne vytvorených komunitách, relatívne odchylky väčšie ako pri reálnych komunitách.
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vlastnosť</th>
+                    <th>Priemerná relavívna štandardná odchylka</th>
+                    <th>% prípadov, kedy pri náhodnom výbere bola odchylka väčšia ({{randomCommunitySampleIterations}} iterácií)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Počet priateľov</td><td>{{friendsCountAverageRSD}}</td><td>{{friendsCountHiigherValuePercentage}}</td></tr>
+                <tr><td>Steam level</td><td>{{steamLevelAverageRSD}}</td><td>{{steamLevelHiigherValuePercentage}}</td></tr>
+                <tr><td>Počet hier</td><td>{{gameCountAverageRSD}}</td><td>{{gameCountHigherValuePercentage}}</td></tr>
+                <tr><td>Nahraté hodiny</td><td>{{playtimeAverageRSD}}</td><td>{{friendsCountHigherValuePercentage}}</td></tr>
+                <tr><td>Počet rokov od registrácie</td><td>{{yearsRegisteredAverageRSD}}</td><td>{{yearsRegisteredHigherValuePercentage}}</td></tr>
+                <tr><td>Počet komunít</td><td>{{communitiesMemberAverageRSD}}</td><td>{{communitiesMemberHigherValuePercentage}}</td></tr>
+                <tr><td>Počet spájaných komunít</td><td>{{maxJoiningCommunitiesAverageRSD}}</td><td>{{maxJoiningCommunitiesHigherValuePercentage}}</td></tr>
+                <tr><td>Gini coefficient top hier</td><td>{{topGamesGiniCoefficientAverageRSD}}</td><td>{{topGamesGiniCoefficientHigherValuePercentage}}</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/frontend-config.js"></script>
+    <script src="/steam/country-distribution-chart.js"></script>
+    <script src="/steam/most-played-games-chart.js"></script>
+    <script src="/steam/game-playtime-distribution-chart.js"></script>
+    <script src="/steam/community-size-distribution-chart.js"></script>
+    <script src="/steam/community-membership-distribution.js"></script>
+    <script src="/steam/user-playtime-distribution-chart.js"></script>
+    <script src="/steam/property-correlations-chart.js"></script>
+    <script src="/steam/network-evolution-chart.js"></script>
+    <script src="/steam/community-favourite-games-match-chart.js"></script>
+
+</body>
+</html>
