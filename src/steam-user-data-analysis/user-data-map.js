@@ -16,9 +16,10 @@ function calculateSameCountryNeighboursFraction(user, userDataMap) {
     if (!userCountry) {
         return null;
     }
-    const neighboursWithCountry = userDataMap.get(user).neighbours
-        .filter(neighbour => userDataMap.get(neighbour).country !== null);
-    if (!neighboursWithCountry.length) {
+    const neighbours = userDataMap.get(user).neighbours
+    const neighboursWithCountry = neighbours.filter(neighbour => userDataMap.get(neighbour).country !== null);
+    const allNeighboursHaveCountry = neighboursWithCountry.length === neighbours.length;
+    if (!allNeighboursHaveCountry) {
         return null;
     }
     const neighboursWithSameCountry = neighboursWithCountry

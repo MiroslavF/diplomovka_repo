@@ -68,7 +68,7 @@ axios.get(`${apiUrl}/community-size-distribution`).then((response) => {
                     type: 'logarithmic',
                     scaleLabel: {
                         display: true,
-                        labelString: 'size',
+                        labelString: 's <s>',
                         fontSize: 18,
                     },
                     ticks: {

@@ -3,6 +3,7 @@ const getUserDataMap = require('./steam-user-data-analysis/user-data-map');
 const getCommunitiesWithAvailableGameData = require('./steam-user-data-analysis/communities-with-available-game-data');
 const calculateGiniCoefficient = require('./steam-user-data-analysis/helpers/top-games-gini-coefficient');
 const getUsersFavouriteGames = require('./steam-user-data-analysis/helpers/uses-favourite-games');
+const getAllCommunities = require('./steam-user-data-analysis/helpers/get-all-communities');
 
 async function getNeighbourDegreesFrequencies(node) {
     const nodeToNeighboursMap = await getNodeToNeighboursMap();
@@ -113,28 +114,6 @@ async function randomshit() {
     console.log(getUsersFavouriteGames(mostCommunities, 20));
 }
 
-async function getMaxDistanceFromStartNode() {
-    const startNode = '76561198082367921';
-    const nodeToNeighboursMap = await getNodeToNeighboursMap();
-    const queue = [[startNode, 0]];
-    const visited = new Set();
-    const queuedNodes = new Set();
-    let maxDist = 0;
-    while (queue.length) {
-        const [current, dist] = queue.shift();
-        maxDist = Math.max(maxDist, dist);
-        visited.add(current);
-        const neighbours = nodeToNeighboursMap.get(current);
-        for (let neighbour of neighbours) {
-            if (!visited.has(neighbour) && !queuedNodes.has(neighbour)) {
-                queue.push([neighbour, dist + 1]);
-                queuedNodes.add(neighbour);
-            }
-        }
-    }
-    console.log({ maxDist });
-}
-
 async function getMaxClusteringUsersFavoriteGames() {
     const userDataMap = await getUserDataMap();
     const allUsers = [...userDataMap.values()].filter(user => user.game_data);
@@ -144,7 +123,31 @@ async function getMaxClusteringUsersFavoriteGames() {
     console.log(getUsersFavouriteGames(usersWithClustering1, 10));
 }
 
-(async () => {
-    const users = (await getUsersWithDegree(1)).filter(user => user.game_data);;
-    console.log(getUsersFavouriteGames(users, 20));
-})()
+
+function printCommunitiesInfo() {
+    function getAverageCommunitySize(communities) {
+        const membersSum = communities.reduce((sum, curr) => sum + curr.length, 0);
+        return (membersSum / communities.length).toFixed(2) 
+    }
+    const allCommunities = getAllCommunities();
+    for (const k in allCommunities) {
+        const communities = allCommunities[k].communities;
+        const communitiesCount = communities.length;
+        const largestCommunity = Math.max(...communities.map(c => c.length));
+        const averageCommunitySize = getAverageCommunitySize(communities);
+        console.log({ k, communitiesCount, largestCommunity, averageCommunitySize });
+    }
+}
+
+async function random() {
+    const userDataMap = await getUserDataMap();
+    const allCommunities = getAllCommunities();
+    const communities = allCommunities['k=3'].communities.sort((c1, c2) => c2.length - c1.length).slice(0, 20);
+    // const communities = await getCommunitiesWithAvailableGameData();
+    for (let comm of communities) {
+        const usersWithGameData = comm.map(steamId => userDataMap.get(steamId)).filter(user => user.game_data);
+        console.log(getUsersFavouriteGames(usersWithGameData, 1));
+    }
+}
+
+random();

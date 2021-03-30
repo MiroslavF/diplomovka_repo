@@ -29,8 +29,9 @@ async function calculateAverageCommunityCountryDominancePerCountry() {
             (communityCountryFrequencyMap.get(dominantCountry) || 0) + 1,
         );
     }
+    const getPlayerCount = (country) => [...userDataMap.values()].filter(u => u.country === country).length;
     return [...communityCountryFractionSumMap]
-        .map(([country, sum]) => ({ country, average: sum / communityCountryFrequencyMap.get(country) }))
+        .map(([country, sum]) => ({ country, average: sum / communityCountryFrequencyMap.get(country), playerCount: getPlayerCount(country), communityCount: communityCountryFrequencyMap.get(country) }))
         .sort(({ average: a1 }, { average: a2 }) => a2 - a1);
 }
 

@@ -16,6 +16,7 @@ function calculateUsersAverages(users) {
     const usersWithGameData = users.filter(user => user.game_data === true);
     const usersWithSteamLevel = users.filter(user => user.level !== null);
     const usersWithRegisterDate = users.filter(user => user.since !== null);
+    const usersWithClusteringCoeficient = users.filter(user => user.clusteringCoefficient !== null);
 
     const avgFriendsCount = calculateAverage(users.map(userData => userData.neighbours.length));
     const avgSteamLevel = calculateAverage(usersWithSteamLevel.map(user => user.level));
@@ -26,6 +27,7 @@ function calculateUsersAverages(users) {
     const avgCommunitiesMember = calculateAverage(users.map(user => user.communities));
     const avgMaxJoiningCommunities = calculateAverage(users.map(user => user.maxJoiningCommunities));
     const avgGamesGiniCoefficient = calculateAverage(usersWithGameData.map(user => user.topGamesGiniCoefficient));
+    const avgClusteringCoefficient =  calculateAverage(usersWithClusteringCoeficient.map(user => user.clusteringCoefficient));
 
     return {
         avgFriendsCount,
@@ -37,6 +39,7 @@ function calculateUsersAverages(users) {
         avgCommunitiesMember,
         avgMaxJoiningCommunities,
         avgGamesGiniCoefficient,
+        avgClusteringCoefficient,
     };
 }
 

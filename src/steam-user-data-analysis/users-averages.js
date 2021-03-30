@@ -7,7 +7,7 @@ async function getUsersAverages() {
     const allUsers = [...userDataMap.values()];
     const usersWithoutCommunity = allUsers.filter(user => user.communities === 0);
     // const usersWithMostCommunities = allUsers.filter(user => user.maxJoiningCommunities >= 10);
-    const usersWithMostCommunities = allUsers.filter(user => user.communities >= 40);
+    const usersWithMostCommunities = allUsers.filter(user => user.communities >= 30);
     const usersWithClustering0 = allUsers.filter(user => user.clusteringCoefficient === 0);
     const usersWithClustering1 = allUsers.filter(user => user.clusteringCoefficient === 1);
     return {

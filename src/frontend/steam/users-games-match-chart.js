@@ -1,25 +1,25 @@
-const communityFavouriteGamesMatchCanvas = document.getElementById('communityFavouriteGamesMatch');
+const usersGamesMatchCanvas = document.getElementById('usersGamesMatch');
 
-axios.get(`${apiUrl}/community-favourite-games-match`).then((response) => {
+axios.get(`${apiUrl}/users-games-match`).then((response) => {
     const {
-        communityFavouriteGamesMatch,
+        usersGamesMatch,
     } = response.data;
 
-    const dataPoints = communityFavouriteGamesMatch
-        .map(({ matchingCommunityFraction }) => matchingCommunityFraction);
+    const dataPoints = usersGamesMatch
+        .map(({ matchingGameFraction }) => matchingGameFraction);
 
-    const labels = communityFavouriteGamesMatch
-        .map(({ topNGames }) => topNGames);
+    const labels = usersGamesMatch
+        .map(({ topGamesCount }) => topGamesCount);
 
-    new Chart(communityFavouriteGamesMatchCanvas, {
+    new Chart(usersGamesMatchCanvas, {
         type: 'line',
         data: {
             labels,
             datasets: [
                 {
-                    label: 'Počet najoblubenejších hier',
-                    backgroundColor: 'rgba(255, 0, 55, 0.8)',
-                    borderColor: 'rgba(255, 0, 55, 0.8)',
+                    label: 'Todo lepsie meno',
+                    backgroundColor: 'rgba(133, 73, 186, 0.8)',
+                    borderColor: 'rgba(133, 73, 186, 0.8)',
                     borderWidth: 1,
                     data: dataPoints,
                     fill: false,
@@ -32,7 +32,7 @@ axios.get(`${apiUrl}/community-favourite-games-match`).then((response) => {
         options: {
             title: {
                 display: true,
-                text: 'Community favourite games match'
+                text: 'Users games match'
             },
             scales: {
                 yAxes: [{
@@ -44,7 +44,7 @@ axios.get(`${apiUrl}/community-favourite-games-match`).then((response) => {
                     },
                     scaleLabel: {
                         display: true,
-                        labelString: 'pc',
+                        labelString: 'pe',
                         fontSize: 22,
                     },
                 }],

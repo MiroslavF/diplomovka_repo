@@ -45,6 +45,7 @@ const getUserPlaytimeDistribution = require('./steam-user-data-analysis/user-pla
 const getPropertyCorrelations = require('./steam-user-data-analysis/property-correlations');
 const getNetworkEvolution = require('./steam-user-data-analysis/network-evolution');
 const getCommunityFavouriteGamesMatch = require('./steam-user-data-analysis/community-favourite-games-match');
+const getUsersGamesMatch = require('./steam-user-data-analysis/users-games-match');
 const getCommunityCorrelations = require('./steam-user-data-analysis/community-correlations');
 
 
@@ -185,7 +186,7 @@ app.get('/community-size-distribution', async (req, res) => {
 
 app.get('/community-membership-distribution', async (req, res) => {
     const communityMembershipDistribution = await getCommunityMembershipDistribution();
-    const { avgCommunitiesMember } = await getGamesAverages();
+    const { avgCommunitiesMember } = (await getUsersAverages()).allUsers;
     res.json({ communityMembershipDistribution, avgCommunitiesMember });
 });
 
@@ -215,6 +216,11 @@ app.get('/community-favourite-games-match', async (req, res) => {
     res.json({ communityFavouriteGamesMatch });
 });
 
+app.get('/users-games-match', async (req, res) => {
+    const usersGamesMatch = await getUsersGamesMatch();
+    res.json({ usersGamesMatch });
+});
+
 app.get('/steam', async (req, res) => {
     const {
         playerCount,
@@ -239,6 +245,7 @@ app.get('/steam', async (req, res) => {
         avgCommunitiesMember,
         avgMaxJoiningCommunities,
         avgGamesGiniCoefficient,
+        avgClusteringCoefficient,
     } = (await getUsersAverages()).allUsers;
 
     const {
@@ -251,6 +258,7 @@ app.get('/steam', async (req, res) => {
         avgCommunitiesMember: avgCommunitiesMemberNoCommunity,
         avgMaxJoiningCommunities: avgMaxJoiningCommunitiesNoCommunity,
         avgGamesGiniCoefficient: avgGamesGiniCoefficientNoCommunity,
+        avgClusteringCoefficient: avgClusteringCoefficientNoCommunity
     } = (await getUsersAverages()).withoutCommunity;
 
     const {
@@ -263,6 +271,7 @@ app.get('/steam', async (req, res) => {
         avgCommunitiesMember: avgCommunitiesMemberMostCommunities,
         avgMaxJoiningCommunities: avgMaxJoiningCommunitiesMostCommunities,
         avgGamesGiniCoefficient: avgGamesGiniCoefficientMostCommunities,
+        avgClusteringCoefficient: avgClusteringCoefficientMostCommunities
     } = (await getUsersAverages()).mostCommunities;
 
     const {
@@ -320,6 +329,7 @@ app.get('/steam', async (req, res) => {
         avgCommunitiesMember: avgCommunitiesMember.toFixed(4),
         avgMaxJoiningCommunities: avgMaxJoiningCommunities.toFixed(4),
         avgGamesGiniCoefficient: avgGamesGiniCoefficient.toFixed(4),
+        avgClusteringCoefficient: avgClusteringCoefficient.toFixed(4),
 
         avgFriendsCountNoCommunity: avgFriendsCountNoCommunity.toFixed(4),
         avgSteamLevelNoCommunity: avgSteamLevelNoCommunity.toFixed(4),
@@ -330,16 +340,18 @@ app.get('/steam', async (req, res) => {
         avgCommunitiesMemberNoCommunity: avgCommunitiesMemberNoCommunity.toFixed(4),
         avgMaxJoiningCommunitiesNoCommunity: avgMaxJoiningCommunitiesNoCommunity.toFixed(4),
         avgGamesGiniCoefficientNoCommunity: avgGamesGiniCoefficientNoCommunity.toFixed(4),
+        avgClusteringCoefficientNoCommunity: avgClusteringCoefficientNoCommunity.toFixed(4),
 
         avgFriendsCountMostCommunities: avgFriendsCountMostCommunities.toFixed(4),
         avgSteamLevelMostCommunities: avgSteamLevelMostCommunities.toFixed(4),
         avgGameCountMostCommunities: avgGameCountMostCommunities.toFixed(4),
         avgPlaytimeMostCommunities: avgPlaytimeMostCommunities.toFixed(4),
-        avgSameCountryNeighboursFractionMostCommunities: avgSameCountryNeighboursFractionMostCommunities.toFixed(4),
+        avgSameCountryNeighboursFractionMostCommunities: null,
         avgYearsRegisteredMostCommunities: avgYearsRegisteredMostCommunities.toFixed(4),
         avgCommunitiesMemberMostCommunities: avgCommunitiesMemberMostCommunities.toFixed(4),
         avgMaxJoiningCommunitiesMostCommunities: avgMaxJoiningCommunitiesMostCommunities.toFixed(4),
         avgGamesGiniCoefficientMostCommunities: avgGamesGiniCoefficientMostCommunities.toFixed(4),
+        avgClusteringCoefficientMostCommunities: avgClusteringCoefficientMostCommunities.toFixed(4),
 
         avgGamePlaytime: avgGamePlaytime.toFixed(4),
         avgGameUserCount: avgGameUserCount.toFixed(4),
@@ -396,6 +408,7 @@ app.get('/steam', async (req, res) => {
     // await getCommunityFavouriteGamesMatch()
     // await getCommunityCorrelations();
     // await getRandomizedDegreeCorrelations();
+    // await getUsersGamesMatch();
 })();
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));

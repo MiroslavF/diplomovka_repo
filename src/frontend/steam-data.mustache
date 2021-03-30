@@ -57,46 +57,7 @@
 
     <div style="width: 70%; margin: auto;">
         <div class="heading">
-            <strong>Priemerné hodnoty na jedného hráča</strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet priateľov = <em>{{avgFriendsCount}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Steam level = <em>{{avgSteamLevel}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet kúpených hier = <em>{{avgGameCount}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet nahraných hodín = <em>{{avgPlaytime}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Podiel priateľov s rovnakou krajinou = <em>{{avgSameCountryNeighboursFraction}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet rokov v sieti = <em>{{avgYearsRegistered}}</em></strong>
-            <br/>
-            (doba od registrácie)
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet komunít = <em>{{avgCommunitiesMember}}</em></strong>
-        </div>
-        <div class="steam-value-container">
-            <strong>Počet spájaných komunít = <em>{{avgMaxJoiningCommunities}}</em></strong>
-            <br/>
-            (Max v koľkých je naraz komunitách pre rôzne k-clique rozdelenie siete do komunít)
-        </div>
-        <div class="steam-value-container">
-            <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficient}}</em></strong>
-        </div>
-    </div>
-
-    <hr />
-
-    <div style="width: 70%; margin: auto;">
-        <div class="heading">
-            <strong>Priemerné hodnoty na jedného hru</strong>
+            <strong>Priemerné hodnoty na jednu hru</strong>
         </div>
         <div class="steam-value-container">
             <strong>Počet odohratých hodín = <em>{{avgGamePlaytime}}</em></strong>
@@ -164,11 +125,53 @@
         </div>
     </div>
 
-        <hr />
+    <hr />
+
+    <div style="width: 70%; margin: auto;">
+        <div class="heading">
+            <strong>Priemerné hodnoty na jedného hráča</strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet priateľov = <em>{{avgFriendsCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Steam level = <em>{{avgSteamLevel}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet kúpených hier = <em>{{avgGameCount}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet nahraných hodín = <em>{{avgPlaytime}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Podiel priateľov s rovnakou krajinou = <em>{{avgSameCountryNeighboursFraction}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet rokov v sieti = <em>{{avgYearsRegistered}}</em></strong>
+            <br/>
+            (doba od registrácie)
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet komunít = <em>{{avgCommunitiesMember}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Počet spájaných komunít = <em>{{avgMaxJoiningCommunities}}</em></strong>
+            <br/>
+            (Max v koľkých je naraz komunitách pre rôzne k-clique rozdelenie siete do komunít)
+        </div>
+        <div class="steam-value-container">
+            <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficient}}</em></strong>
+        </div>
+        <div class="steam-value-container">
+            <strong>Priemerny klasterizacny koeficient = <em>{{avgClusteringCoefficient}}</em></strong>
+        </div>
+    </div>
+
+    <hr />
 
     <div style="width: 70%; margin: auto;">
         <div class="value-container">
-            Priemerné hodnoty hráčov bez komunity({{playersWithoutCommunityCount}})
+            Priemerné hodnoty hráčov bez komunity({{playersWithoutCommunityCount}} hracov)
         </div> 
         <div class="steam-value-container">
             <strong>Počet priateľov = <em>{{avgFriendsCountNoCommunity}}</em></strong>
@@ -201,13 +204,16 @@
         <div class="steam-value-container">
             <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficientNoCommunity}}</em></strong>
         </div>
+        <div class="steam-value-container">
+            <strong>Priemerny klasterizacny koeficient = <em>{{avgClusteringCoefficientNoCommunity}}</em></strong>
+        </div>
     </div>
 
-        <hr />
+    <hr />
 
     <div style="width: 70%; margin: auto;">
         <div class="value-container">
-            Priemerné hodnoty hráčov čo spájajú najviac komunít (aspon 10)
+            Priemerné hodnoty hráčov čo v najviac komunitach (aspon v 30 komunitach)
         </div> 
         <div class="steam-value-container">
             <strong>Počet priateľov = <em>{{avgFriendsCountMostCommunities}}</em></strong>
@@ -240,6 +246,9 @@
         <div class="steam-value-container">
             <strong>Gini koeficient top hier (top 10 hier) = <em>{{avgGamesGiniCoefficientMostCommunities}}</em></strong>
         </div>
+        <div class="steam-value-container">
+            <strong>Priemerny klasterizacny koeficient = <em>{{avgClusteringCoefficientMostCommunities}}</em></strong>
+        </div>
     </div>
 
     <hr />
@@ -252,6 +261,11 @@
     <div style="width: 70%; margin: auto;">
         <div class="chart-container">
             <canvas id="networkEvolution"></canvas>
+        </div>
+    </div>
+    <div style="width: 70%; margin: auto;">
+        <div class="chart-container">
+            <canvas id="usersGamesMatch"></canvas>
         </div>
     </div>
     <div style="width: 70%; margin: auto;">
@@ -294,6 +308,7 @@
     <script src="/steam/property-correlations-chart.js"></script>
     <script src="/steam/network-evolution-chart.js"></script>
     <script src="/steam/community-favourite-games-match-chart.js"></script>
+    <script src="/steam/users-games-match-chart.js"></script>
 
 </body>
 </html>

@@ -91,11 +91,14 @@ const config = {
         communityFavouriteGamesMatch: {
             maxGamesCount: 10,
         },
+        usersGamesMatch: {
+            maxGamesCount: 10,
+        },
         communityCorrelation: {
             randomCommunitySampleIterations: 1000,
         },
         propertyCorrelations: {
-            baseProperty: "friendsCount",
+            baseProperty: "communitiesMember",
             friendsCount: {
                 binSize: 40,
                 range: {
