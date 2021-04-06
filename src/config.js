@@ -62,7 +62,7 @@ const config = {
         }
     },
     steamData: {
-        // topGamesGiniCoefficientParameter: { topGamesCount: 10 }, // remove cache to recalculate, default to all games
+        // topGamesGiniCoefficientParameter: { topGamesCount: 5 }, // remove cache to recalculate, defaults to all games
         countryDistribution: {
             displayLimit: 20,
             showRest: false,
@@ -95,7 +95,7 @@ const config = {
             maxGamesCount: 10,
         },
         communityCorrelation: {
-            randomCommunitySampleIterations: 1000,
+            randomCommunitySampleIterations: 10000,
         },
         propertyCorrelations: {
             baseProperty: "communitiesMember",

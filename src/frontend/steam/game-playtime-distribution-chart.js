@@ -3,24 +3,13 @@ const gamePlaytimeDistributionCanvas = document.getElementById('gamePlaytimeDist
 axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
     const {
         gamePlaytimeDistribution,
-        avgPlaytimeFraction,
+        avgGamePlaytime,
     } = response.data;
 
-    const dataPoints = gamePlaytimeDistribution.map(({ playtimeFraction, p }) => ({ x: playtimeFraction, y: p }));
+    const dataPoints = gamePlaytimeDistribution.map(({ playtime, p }) => ({ x: playtime, y: p }));
 
-    const minX = dataPoints.reduce((min, { x }) => Math.min(min, x), 1);
     const minY = dataPoints.reduce((min, { y }) => Math.min(min, y), 1);
-
-    function buildXAxisTicks(minX) {
-        ticks = [1];
-        let last = 1;
-        while (last > minX) {
-            last = last / 10;
-            ticks.push(last);
-        }
-        return ticks;
-    }
-    
+ 
     function buildYAxisTicks(minY) {
         ticks = [0.1];
         let last = 0.1;
@@ -31,7 +20,8 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
         return ticks;
     }
 
-    const xAxisTicks = buildXAxisTicks(minX);
+    // const xAxisTicks = buildXAxisTicks(minX);
+    const xAxisTicks = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000];
     const yAxisTicks = buildYAxisTicks(minY);
 
     new Chart(gamePlaytimeDistributionCanvas, {
@@ -41,8 +31,8 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
                 {
                     showLine: false,
                     label: 'Game playtime distribution',
-                    backgroundColor: 'rgba(133, 73, 186, 0.3)',
-                    borderColor: 'rgba(133, 73, 186, 0.3)',
+                    backgroundColor: 'rgba(133, 73, 186, 0.35)',
+                    borderColor: 'rgba(133, 73, 186, 0.35)',
                     data: dataPoints,
                 },
                 {
@@ -51,10 +41,10 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
                     borderDash: [20, 10],
                     pointRadius: 0,
                     borderWidth: 2,
-                    label: `average playtime per game = ${avgPlaytimeFraction}`,
+                    label: `average playtime per game = ${avgGamePlaytime}`,
                     backgroundColor: 'rgba(0, 153, 51, 0.7)',
                     borderColor: 'rgba(0, 153, 51, 0.7)',
-                    data: [{ x: avgPlaytimeFraction, y: Math.min(...yAxisTicks) }, { x: avgPlaytimeFraction, y: Math.max(...yAxisTicks)  }],
+                    data: [{ x: avgGamePlaytime, y: Math.min(...yAxisTicks) }, { x: avgGamePlaytime, y: Math.max(...yAxisTicks)  }],
                 },
             ]
         },
@@ -68,13 +58,13 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
                     type: 'logarithmic',
                     scaleLabel: {
                         display: true,
-                        labelString: 'playtime fraction',
-                        fontSize: 18,
+                        labelString: 'h <h>',
+                        fontSize: 22,
                     },
                     ticks: {
-                        min: 0,
-                        max: Math.max(...xAxisTicks),
-                        callback: (value, index) => value.toFixed(index),
+                        min: 1,
+                        max: 100000000,
+                        callback: (value) => value.toLocaleString(),
                     },
                     afterBuildTicks: chart => chart.ticks = xAxisTicks,
                 }],
@@ -83,7 +73,7 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
                     scaleLabel: {
                         display: true,
                         labelString: 'p',
-                        fontSize: 18,
+                        fontSize: 22,
                     },
                     ticks: {
                         min: Math.min(...yAxisTicks),

@@ -273,30 +273,13 @@
             <canvas id="communityFavouriteGamesMatch"></canvas>
         </div>
     </div>
-    <div style="width: 70%; margin: auto;">
-        <div class="value-container">
-            Priemerné relatívne odchýlky vrámci komunít, pre jednotlivé vlastnosti.
-            A v percentách koľkokrát boli pri náhodne vytvorených komunitách, relatívne odchylky väčšie ako pri reálnych komunitách.
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Vlastnosť</th>
-                    <th>Priemerná relavívna štandardná odchylka</th>
-                    <th>% prípadov, kedy pri náhodnom výbere bola odchylka väčšia ({{randomCommunitySampleIterations}} iterácií)</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>Počet priateľov</td><td>{{friendsCountAverageRSD}}</td><td>{{friendsCountHiigherValuePercentage}}</td></tr>
-                <tr><td>Steam level</td><td>{{steamLevelAverageRSD}}</td><td>{{steamLevelHiigherValuePercentage}}</td></tr>
-                <tr><td>Počet hier</td><td>{{gameCountAverageRSD}}</td><td>{{gameCountHigherValuePercentage}}</td></tr>
-                <tr><td>Nahraté hodiny</td><td>{{playtimeAverageRSD}}</td><td>{{friendsCountHigherValuePercentage}}</td></tr>
-                <tr><td>Počet rokov od registrácie</td><td>{{yearsRegisteredAverageRSD}}</td><td>{{yearsRegisteredHigherValuePercentage}}</td></tr>
-                <tr><td>Počet komunít</td><td>{{communitiesMemberAverageRSD}}</td><td>{{communitiesMemberHigherValuePercentage}}</td></tr>
-                <tr><td>Počet spájaných komunít</td><td>{{maxJoiningCommunitiesAverageRSD}}</td><td>{{maxJoiningCommunitiesHigherValuePercentage}}</td></tr>
-                <tr><td>Gini coefficient top hier</td><td>{{topGamesGiniCoefficientAverageRSD}}</td><td>{{topGamesGiniCoefficientHigherValuePercentage}}</td></tr>
-            </tbody>
-        </table>
-    </div>
+
+    <canvas id="friendsCountRSDDistribution"></canvas>
+    <canvas id="gameCountRSDDistribution"></canvas>
+    <canvas id="playtimeRSDDistribution"></canvas>
+    <canvas id="yearsRegisteredRSDDistribution"></canvas>
+    <canvas id="communitiesMemberRSDDistribution"></canvas>
+    <canvas id="topGamesGiniCoefficientRSDDistribution"></canvas>
 
     <script src="/frontend-config.js"></script>
     <script src="/steam/country-distribution-chart.js"></script>
@@ -309,6 +292,7 @@
     <script src="/steam/network-evolution-chart.js"></script>
     <script src="/steam/community-favourite-games-match-chart.js"></script>
     <script src="/steam/users-games-match-chart.js"></script>
+    <script src="/steam/community-property-rsds-distributions-charts.js"></script>
 
 </body>
 </html>

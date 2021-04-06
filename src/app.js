@@ -172,10 +172,8 @@ app.get('/most-played-games', async (req, res) => {
 
 app.get('/game-playtime-distribution', async (req, res) => {
     const gamePlaytimeDistribution = await getGamePlaytimeDistribution();
-    const { totalPlaytime } = await getCounts();
     const { avgGamePlaytime } = await getGamesAverages();
-    const avgPlaytimeFraction = avgGamePlaytime / totalPlaytime;
-    res.json({ gamePlaytimeDistribution, avgPlaytimeFraction });
+    res.json({ gamePlaytimeDistribution, avgGamePlaytime });
 });
 
 app.get('/community-size-distribution', async (req, res) => {
@@ -219,6 +217,11 @@ app.get('/community-favourite-games-match', async (req, res) => {
 app.get('/users-games-match', async (req, res) => {
     const usersGamesMatch = await getUsersGamesMatch();
     res.json({ usersGamesMatch });
+});
+
+app.get('/community-correlations', async (req, res) => {
+    const communityCorrelations = await getCommunityCorrelations();
+    res.json(communityCorrelations);
 });
 
 app.get('/steam', async (req, res) => {
@@ -279,30 +282,6 @@ app.get('/steam', async (req, res) => {
         avgGameUserCount,
     } = await getGamesAverages();
 
-    const {
-        realCommunityAveragedDeviations: {
-            friendsCount: friendsCountAverageRSD,
-            steamLevel: steamLevelAverageRSD,
-            gameCount: gameCountAverageRSD,
-            playtime: playtimeAverageRSD,
-            yearsRegistered: yearsRegisteredAverageRSD,
-            communitiesMember: communitiesMemberAverageRSD,
-            maxJoiningCommunities: maxJoiningCommunitiesAverageRSD,
-            topGamesGiniCoefficient: topGamesGiniCoefficientAverageRSD,
-        },
-        higherValuePercentage: {
-            friendsCount: friendsCountHiigherValuePercentage,
-            steamLevel: steamLevelHiigherValuePercentage,
-            gameCount: gameCountHigherValuePercentage,
-            playtime: friendsCountHigherValuePercentage,
-            yearsRegistered: yearsRegisteredHigherValuePercentage,
-            communitiesMember: communitiesMemberHigherValuePercentage,
-            maxJoiningCommunities: maxJoiningCommunitiesHigherValuePercentage,
-            topGamesGiniCoefficient: topGamesGiniCoefficientHigherValuePercentage,
-        },
-    } = await getCommunityCorrelations();
-    const randomCommunitySampleIterations = config.steamData.communityCorrelation.randomCommunitySampleIterations;
-
     const averageCommunityCountryDominance = await getAverageCommunityCountryDominance();
 
     const averageCommunityCountryDominancePerCountry = await getAverageCommunityCountryDominancePerCountry();
@@ -360,26 +339,6 @@ app.get('/steam', async (req, res) => {
         averageCommunityCountryDominancePerCountry: averageCommunityCountryDominancePerCountry
             .slice(0, displayLimit)
             .map(({ country, average }) => ({ country: (iso3166.country(country) || { name: country }).name, average: average.toFixed(4) })),
-
-        friendsCountAverageRSD: friendsCountAverageRSD.toFixed(2),
-        steamLevelAverageRSD: steamLevelAverageRSD.toFixed(2),
-        gameCountAverageRSD: gameCountAverageRSD.toFixed(2),
-        playtimeAverageRSD: playtimeAverageRSD.toFixed(2),
-        yearsRegisteredAverageRSD: yearsRegisteredAverageRSD.toFixed(2),
-        communitiesMemberAverageRSD: communitiesMemberAverageRSD.toFixed(2),
-        maxJoiningCommunitiesAverageRSD: maxJoiningCommunitiesAverageRSD.toFixed(2),
-        topGamesGiniCoefficientAverageRSD: topGamesGiniCoefficientAverageRSD.toFixed(2),
-
-        friendsCountHiigherValuePercentage: friendsCountHiigherValuePercentage.toFixed(2),
-        steamLevelHiigherValuePercentage: steamLevelHiigherValuePercentage.toFixed(2),
-        gameCountHigherValuePercentage: gameCountHigherValuePercentage.toFixed(2),
-        friendsCountHigherValuePercentage: friendsCountHigherValuePercentage.toFixed(2),
-        yearsRegisteredHigherValuePercentage: yearsRegisteredHigherValuePercentage.toFixed(2),
-        communitiesMemberHigherValuePercentage: communitiesMemberHigherValuePercentage.toFixed(2),
-        maxJoiningCommunitiesHigherValuePercentage: maxJoiningCommunitiesHigherValuePercentage.toFixed(2),
-        topGamesGiniCoefficientHigherValuePercentage: topGamesGiniCoefficientHigherValuePercentage.toFixed(2),
-
-        randomCommunitySampleIterations,
     })
 });
 

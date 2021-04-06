@@ -28,7 +28,7 @@ function getRandomMatchingCommunity(community, userDataMap, allUsers) {
 }
 
 function getRandomMatchingCommunities(realCommunities, userDataMap) {
-    const allUsers = [...userDataMap.values()].filter(user => user.game_data && user.since && user.country && user.level);
+    const allUsers = [...userDataMap.values()].filter(user => user.game_data && user.since && user.country);
     return realCommunities.map(community => getRandomMatchingCommunity(community, userDataMap, allUsers))
 }
 

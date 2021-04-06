@@ -28,6 +28,7 @@ function calculateGiniCoefficient(games, { topGamesCount, topGamesFraction = 1 }
     if (topGamesCount) {
         topGames = getTopGamesByCount(games, topGamesCount);
     }
+
     return gini.unordered(topGames.map(game => game.playtime));
 }
 

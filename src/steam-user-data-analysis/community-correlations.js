@@ -17,23 +17,19 @@ const getAverage = values => sum(values) / values.length;
 
 const userProperties = [
     "friendsCount",
-    "steamLevel",
     "gameCount",
     "playtime",
     "yearsRegistered",
     "communitiesMember",
-    "maxJoiningCommunities",
     "topGamesGiniCoefficient",
 ];
 
 const propertyExtractionFunctions = {
     friendsCount: user => user.neighbours.length,
-    steamLevel: user => user.level,
     gameCount: user => user.games.length,
     playtime: user => sum(user.games.map(game => game.playtime)),
     yearsRegistered: user => yearsPassed(user.since),
     communitiesMember: user => user.communities,
-    maxJoiningCommunities: user => user.maxJoiningCommunities,
     topGamesGiniCoefficient: user => user.topGamesGiniCoefficient,
 };
 
@@ -50,7 +46,7 @@ function getCommunityRSDs(community, userDataMap) {
 function getAveragedCommunityRSDs(communitiesRSDData) {
     const result = {};
     for (let property of userProperties) {
-        result[property] = getAverage(communitiesRSDData.map(RSDs => RSDs[property]));
+        result[property] = getAverage(communitiesRSDData.map(RSDs => RSDs[property])).toFixed(2);
     }
     return result;
 }
@@ -60,29 +56,42 @@ function calculateCommunityAverageDeviations(communities, userDataMap) {
     return getAveragedCommunityRSDs(communitiesRSDData);
 }
 
-function higherValuePercentage(realCommunitiesAverageRSDs, averagedRandomMatchingCommunityRSDs) {
-    const result = {};
-    for (let property in realCommunitiesAverageRSDs) {
-        const higherValuesCount = averagedRandomMatchingCommunityRSDs.filter(RSDs => RSDs[property] > realCommunitiesAverageRSDs[property]).length;
-        result[property] = (higherValuesCount / averagedRandomMatchingCommunityRSDs.length) * 100;
+function getPropertyRSDsFrequencies(property, randomMatchingCommunitiesRSDs) {
+    const propertyRSDs = randomMatchingCommunitiesRSDs.map(RSDs => RSDs[property]);
+    const propertyRSDFrequencyMap = new Map();
+    for (let propertyRSD of propertyRSDs) {
+        propertyRSD = Math.round(propertyRSD * 10) / 10;
+        propertyRSDFrequencyMap.set(
+            propertyRSD,
+            (propertyRSDFrequencyMap.get(propertyRSD) || 0) + 1,
+        )
     }
-    return result;
+    return [...propertyRSDFrequencyMap]
+        .map(([propertyRSD, frequency]) => ({ RSD: propertyRSD, count: frequency }))
+        .sort(({ RSD: rsd1 }, { RSD: rsd2 }) => rsd2 - rsd1);
 }
 
 async function calculateCommunityCorrelations() {
     const userDataMap = await getUserDataMap();
     const realCommunities = await getCommunitiesWithAvailableGameData();
 
-    const averagedRandomMatchingCommunityRSDs = [];
-    for (let i = 1; i <= randomCommunitySampleIterations ; i++) {
+    const randomMatchingCommunitiesRSDs = [];
+    for (let i = 1; i <= randomCommunitySampleIterations; i++) {
         console.log(`Community correlations: iteration ${i}`);
         const randomMatchingCommunities = getRandomMatchingCommunities(realCommunities, userDataMap);
-        averagedRandomMatchingCommunityRSDs.push(calculateCommunityAverageDeviations(randomMatchingCommunities, userDataMap));
+        randomMatchingCommunitiesRSDs.push(calculateCommunityAverageDeviations(randomMatchingCommunities, userDataMap))
     }
-    const realCommunityAveragedDeviations = calculateCommunityAverageDeviations(realCommunities, userDataMap);
+    const realCommunitiesAveragedDeviations = calculateCommunityAverageDeviations(realCommunities, userDataMap);
     return {
-        realCommunityAveragedDeviations,
-        higherValuePercentage: higherValuePercentage(realCommunityAveragedDeviations, averagedRandomMatchingCommunityRSDs),
+        realCommunitiesAveragedDeviations,
+        generatedCommunities: {
+            friendsCount: getPropertyRSDsFrequencies('friendsCount', randomMatchingCommunitiesRSDs),
+            gameCount: getPropertyRSDsFrequencies('gameCount', randomMatchingCommunitiesRSDs),
+            playtime: getPropertyRSDsFrequencies('playtime', randomMatchingCommunitiesRSDs),
+            yearsRegistered: getPropertyRSDsFrequencies('yearsRegistered', randomMatchingCommunitiesRSDs),
+            communitiesMember: getPropertyRSDsFrequencies('communitiesMember', randomMatchingCommunitiesRSDs),
+            topGamesGiniCoefficient: getPropertyRSDsFrequencies('topGamesGiniCoefficient', randomMatchingCommunitiesRSDs),
+        }
     };
 }
 
