@@ -5,7 +5,8 @@ async function calculateFromMaxDegree() {
     const nodeCount = await getNodeCount();
     const normalDegreeDistribution = await getNormalDegreeDistribution();
     const maxDegree = normalDegreeDistribution.reduce((max, { k }) => Math.max(k, max), 0);
-    return (Math.log(nodeCount) + Math.log(maxDegree)) / Math.log(maxDegree);
+    const minDegree = normalDegreeDistribution.reduce((min, { k }) => Math.min(k, min), Infinity);
+    return (1 / ((Math.log(maxDegree) - Math.log(minDegree)) / Math.log(nodeCount))) + 1;
 }
 
 module.exports = calculateFromMaxDegree;
