@@ -4,6 +4,7 @@ axios.get(`${apiUrl}/community-size-distribution`).then((response) => {
     const {
         communitySizeDistribution,
         avgCommunitySize,
+        regression,
     } = response.data;
 
     const dataPoints = communitySizeDistribution.map(({ size, p }) => ({ x: size, y: p }));
@@ -38,6 +39,19 @@ axios.get(`${apiUrl}/community-size-distribution`).then((response) => {
         type: 'line',
         data: {
             datasets: [
+                {
+                    showLine: true,
+                    fill: false,
+                    pointRadius: 0,
+                    borderWidth: 3,
+                    label: regression.exp,
+                    backgroundColor: 'rgb(255, 51, 95)',
+                    borderColor: 'rgb(255, 51, 95)',
+                    data: [
+                        { x: 1, y: Math.E**(regression.c + Math.log(1) * regression.exp) },
+                        { x: 100000, y: Math.E**(regression.c + Math.log(100000) * regression.exp) },
+                    ],
+                },
                 {
                     showLine: false,
                     label: 'Game playtime distribution',

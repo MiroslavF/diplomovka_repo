@@ -28,10 +28,10 @@ function getBinProbabilitySum(bin) {
     return bin.reduce((sum, { p }) => sum + p, 0);
 }
 
-function calculateLogBinnedDistribution(degreeDistribution) {
-    const maxDegree = degreeDistribution.reduce((maxDeg, { x }) => Math.max(maxDeg, x), 0);
+function calculateLogBinnedDistribution(distribution) {
+    const maxDegree = distribution.reduce((maxDeg, { x }) => Math.max(maxDeg, x), 0);
     const bins = createEmptyBins(maxDegree);
-    for (let point of degreeDistribution) {
+    for (let point of distribution) {
         bins[getBinIndex(point.x)].push(point);
     }
     return bins

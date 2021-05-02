@@ -17,7 +17,7 @@ async function calculateCommunitySizeDistribution() {
     }
     return [...communitySizeFrequencyMap]
         .map(([size, count]) =>({ size, p: count / totalCommunityCount }))
-        .sort(({ size: s1 }, { size: s2 }) => s2 - s1);
+        .sort(({ size: s1 }, { size: s2 }) => s1 - s2);
 }
 
 

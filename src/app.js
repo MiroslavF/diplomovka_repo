@@ -47,6 +47,7 @@ const getNetworkEvolution = require('./steam-user-data-analysis/network-evolutio
 const getCommunityFavouriteGamesMatch = require('./steam-user-data-analysis/community-favourite-games-match');
 const getUsersGamesMatch = require('./steam-user-data-analysis/users-games-match');
 const getCommunityCorrelations = require('./steam-user-data-analysis/community-correlations');
+const getCommunitySizeDistributionRegression = require('./steam-user-data-analysis/community-size-distribution-regression');
 
 
 const port = config.port;
@@ -179,7 +180,11 @@ app.get('/game-playtime-distribution', async (req, res) => {
 app.get('/community-size-distribution', async (req, res) => {
     const communitySizeDistribution = await getCommunitySizeDistribution();
     const { avgCommunitySize } = await getCommunityAverages();
-    res.json({ communitySizeDistribution, avgCommunitySize: avgCommunitySize.toFixed(4) });
+    const { exp, c } = await getCommunitySizeDistributionRegression();
+    res.json({
+        communitySizeDistribution,
+        avgCommunitySize: avgCommunitySize.toFixed(4),
+        regression: { exp, c } });
 });
 
 app.get('/community-membership-distribution', async (req, res) => {

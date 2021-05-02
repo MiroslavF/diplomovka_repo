@@ -35,37 +35,37 @@ axios.get(`${apiUrl}/community-correlations`).then((response) => {
     const chartOptionsObjects = [
         {
             canvas: friendsCountRSDDistributionCanvas,
-            label: `a) Počet priateľov pa = ${getPercentile('friendsCount', generatedCommunities.friendsCount)}`,
+            label: `a) Počet priateľov`,
             dataPoints: generatedCommunities.friendsCount.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.friendsCount,
         },
         {
             canvas: gameCountRSDDistributionCanvas,
-            label: `b) Počet hier pb = ${getPercentile('gameCount', generatedCommunities.gameCount)}`,
+            label: `b) Počet hier`,
             dataPoints: generatedCommunities.gameCount.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.gameCount,
         },
         {
             canvas: playtimeRSDDistributionCanvas,
-            label: `c) Počet odohratých hodín pc= ${getPercentile('playtime', generatedCommunities.playtime)}`,
+            label: `c) Počet odohratých hodín`,
             dataPoints: generatedCommunities.playtime.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.playtime,
         },
         {
             canvas: yearsRegisteredRSDDistributionCanvas,
-            label: `d) Doba od registrácie pd = ${getPercentile('yearsRegistered', generatedCommunities.yearsRegistered)}`,
+            label: `d) Doba od registrácie`,
             dataPoints: generatedCommunities.yearsRegistered.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.yearsRegistered,
         },
         {
             canvas: communitiesMemberRSDDistributionCanvas,
-            label: `e) Počet komunít pe = ${getPercentile('communitiesMember', generatedCommunities.communitiesMember)}`,
+            label: `e) Počet komunít`,
             dataPoints: generatedCommunities.communitiesMember.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.communitiesMember,
         },
         {
             canvas: topGamesGiniCoefficientRSDDistributionCanvas,
-            label: `f) Gini koeficient rozloženia herného času pf = ${getPercentile('topGamesGiniCoefficient', generatedCommunities.topGamesGiniCoefficient)}`,
+            label: `f) Gini koeficient rozloženia herného času`,
             dataPoints: generatedCommunities.topGamesGiniCoefficient.map(({ RSD, count }) => ({ x: RSD, y: count })),
             realRSD: realCommunitiesAveragedDeviations.topGamesGiniCoefficient,
         },
@@ -103,21 +103,14 @@ axios.get(`${apiUrl}/community-correlations`).then((response) => {
                     scaleLabel: {
                         display: true,
                         labelString: options.label,
-                        fontSize: 26,
                     },
-                    ticks: {
-                        fontSize: 18,
-                    }
                 }],
                 yAxes: [{
                     type: 'linear',
-                    ticks: {
-                        fontSize: 18 
-                    }
                 }]
             },
             legend: {
-                display: false,
+                display: true,
             },
         }
     }))
