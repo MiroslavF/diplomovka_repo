@@ -141,13 +141,9 @@ function printCommunitiesInfo() {
 
 async function random() {
     const userDataMap = await getUserDataMap();
-    const allCommunities = getAllCommunities();
-    // const communities = allCommunities['k=3'].communities.sort((c1, c2) => c2.length - c1.length).slice(0, 20);
     const communities = await getCommunitiesWithAvailableGameData();
     for (let comm of communities) {
         const usersWithGameData = comm.map(steamId => userDataMap.get(steamId)).filter(user => user.game_data);
         console.log(getUsersFavouriteGames(usersWithGameData, 2));
     }
 }
-
-random();
