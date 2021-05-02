@@ -49,10 +49,10 @@ const config = {
             cutoffs: {
                 normal: {
                     leftOutlierCount: 0,
-                    rightOutlierCount: 50,
+                    rightOutlierCount: 0,
                 },
                 logBinned: {
-                    leftOutlierCount: 6,
+                    leftOutlierCount: 0,
                     rightOutlierCount: 0,
                 }
             }
