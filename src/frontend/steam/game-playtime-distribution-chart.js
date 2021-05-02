@@ -58,7 +58,7 @@ axios.get(`${apiUrl}/game-playtime-distribution`).then((response) => {
                     type: 'logarithmic',
                     scaleLabel: {
                         display: true,
-                        labelString: 'h <h>',
+                        labelString: 'h',
                         fontSize: 22,
                     },
                     ticks: {
